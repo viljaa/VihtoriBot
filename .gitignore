@@ -1,0 +1,5 @@
+# Folders not to push
+node_modules
+
+# Single files not to push
+.env

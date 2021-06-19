@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "umd",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "strict": true,                          
+    "alwaysStrict": true,              
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
