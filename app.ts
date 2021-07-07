@@ -1,5 +1,5 @@
 /* Imports */
-import Bot from './classes/bot-core'
+import Bot from './classes/Bot'
 
 /* Bot configuration */
 const bot: Bot = new Bot
