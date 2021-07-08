@@ -34,9 +34,13 @@ export default class Bot {
         this.initializeCommands(this.commandFiles)
         /* Listen for incoming commands, execute commands by refering to command name */
         this.client.on('message', message => {
-            const command: string = message.content.slice(2)
+            if (!message.content.startsWith(this.prefix) || message.author.bot) return
+            const args: string[] = message.content.slice(2).split(' ')
+            const command: string = args[0]
+            args.shift()
+
             try {
-                this.commandCollection.get(command)?.execute(message)
+                this.commandCollection.get(command)?.execute(message, args)
             }
             catch(err){
                 console.log(err)
