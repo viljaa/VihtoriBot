@@ -14,10 +14,12 @@
   "dependencies": {
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
+    "node-fetch": "^2.6.1",
     "typescript": "^4.3.4"
   },
   "devDependencies": {
     "@types/node": "^15.12.4",
+    "@types/node-fetch": "^2.5.11",
     "@types/ws": "^7.4.5",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
