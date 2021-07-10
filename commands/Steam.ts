@@ -10,7 +10,7 @@ export const command: Command = {
 		const apiKey = process.env.STEAM_API_KEY
         
         // Get steam account name with StemaID
-        if (args?.includes('name')) {
+        if (args && args[0] === 'name') {
             try {
                 const steamid = args[1]
                 getPlayerSummariesJSON(steamid, apiKey!)
@@ -25,7 +25,7 @@ export const command: Command = {
             }
         }
         // Get total playtime on the account
-        if (args?.includes('hours')) {
+        if (args && args[0] === 'hours') {
             try {
                 const steamid = args[1]
 
