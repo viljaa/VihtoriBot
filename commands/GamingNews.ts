@@ -40,7 +40,7 @@ isn't created every time execute() -function is fired and cron jobs can keep tra
 of the job instance. This is crucial to be able to stop a started job. */
 
 // Job for scraping and posting newest article from Pelaaja.fi
-const scrapePelaaja: CronJob = new CronJob('* */1 * * * *', () => {
+const scrapePelaaja: CronJob = new CronJob('0 0 */1 * * *', () => {
     fetch('https://pelaaja.fi/')
     .then(res => res.text())
     .then(body => {
