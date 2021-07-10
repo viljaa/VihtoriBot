@@ -12,12 +12,16 @@
   "author": "Ville Jaatinen",
   "license": "MIT",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "cron": "^1.8.2",
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "node-fetch": "^2.6.1",
     "typescript": "^4.3.4"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.30",
+    "@types/cron": "^1.7.3",
     "@types/node": "^15.12.4",
     "@types/node-fetch": "^2.5.11",
     "@types/ws": "^7.4.5",
