@@ -4,8 +4,15 @@ import { CronJob } from 'cron'
 import cheerio from 'cheerio'
 import fetch from 'node-fetch'
 
+/* Command variabnles */
 let commandMsg: Message
+let previousArticleUrl: {[key: string]: string} = {
+    pelaaja: '',
+    ign: '',
+    rps: ''
+}
 
+/* Command */
 export const command: Command = {
     name: 'gamingnews',
     description: 'Gaming articles scraped from different news sources.',
@@ -20,7 +27,7 @@ export const command: Command = {
                     switch (args[1]) {
                         case 'activate': {
                             scrapePelaaja.start()
-                            message.channel.send('Roger that gamer, news from Pelaaja.fi incoming every hour!')
+                            message.channel.send('Roger that gamer, news from Pelaaja.fi incoming!')
                             break
                         }
                         case 'stop': {
@@ -34,7 +41,7 @@ export const command: Command = {
                     switch (args[1]) {
                         case 'activate': {
                             scrapeIgn.start()
-                            message.channel.send('Daring aren\'t we, news from IGN incoming every hour!')
+                            message.channel.send('Daring aren\'t we, news from IGN incoming!')
                             break
                         }
                         case 'stop': {
@@ -48,7 +55,7 @@ export const command: Command = {
                     switch (args[1]) {
                         case 'activate': {
                             scrapeRPS.start()
-                            message.channel.send('I see you\'re a gamer of culture as well, news from RockPaperShotgun incoming every hour!')
+                            message.channel.send('I see you\'re a gamer of culture as well, news from RockPaperShotgun incoming!')
                             break
                         }
                         case 'stop': {
@@ -65,7 +72,9 @@ export const command: Command = {
 	}
 }
 
-/* Function for generating embedded news post message */
+/* Helper funcitons for gamingnews service */
+
+// Function for generating embedded news post message
 function generateEmbeddedMessage(sourceName: string, scoop: string, articleUrl?: string, articleImgUrl?: string): MessageEmbed {
     return new MessageEmbed()
     .setColor('#7400b8')
@@ -76,14 +85,19 @@ function generateEmbeddedMessage(sourceName: string, scoop: string, articleUrl?:
     .setTimestamp()
 }
 
+// Function for checking if the news article has already been posted once
+function validatePost(oldUrl: string, newUrl: string, source: string):  boolean {
+    previousArticleUrl[source] = newUrl
+    return oldUrl != newUrl
+}
+
 /* GameingNews cron-job configuration. */
 
 /* All jobs must be defined outside of command scope, so that a new instance of the job
 isn't created every time execute() -function is fired and cron jobs can keep track
 of the job instance. This is crucial to be able to stop a started job. */
 
-// Job for scraping and posting newest article from Pelaaja.fi
-const scrapePelaaja: CronJob = new CronJob('0 0 */1 * * *', () => {
+const scrapePelaaja: CronJob = new CronJob('0 */5 * * * *', () => {   
     fetch('https://pelaaja.fi/')
     .then(res => res.text())
     .then(body => {
@@ -98,11 +112,13 @@ const scrapePelaaja: CronJob = new CronJob('0 0 */1 * * *', () => {
         const articleImgUrl = $('.view-content>.views-row>.layout-title-box>.title-box-background>a>img').first().attr('src')
 
         // Create embedded message
-        commandMsg.channel.send(generateEmbeddedMessage('Pelaaja.fi', scoop, articleUrl, articleImgUrl))
+        if (validatePost(previousArticleUrl.pelaaja, articleUrl, 'pelaaja')) {
+            commandMsg.channel.send(generateEmbeddedMessage('Pelaaja.fi', scoop, articleUrl, articleImgUrl))
+        }
     })
 })
 
-const scrapeIgn: CronJob = new CronJob('0 19 */1 * * *', () => {
+const scrapeIgn: CronJob = new CronJob('40 */5 * * * *', () => {
     fetch('https://nordic.ign.com/article/news')
     .then(res => res.text())
     .then(body => {
@@ -116,11 +132,13 @@ const scrapeIgn: CronJob = new CronJob('0 19 */1 * * *', () => {
         const articleImgUrl = $('article>.t>a>img').first().attr('src')
 
         //Create embedded message
-        commandMsg.channel.send(generateEmbeddedMessage('IGN', scoop, articleUrl, articleImgUrl))
+        if (validatePost(previousArticleUrl.ign, articleUrl!, 'ign')) {
+            commandMsg.channel.send(generateEmbeddedMessage('IGN', scoop, articleUrl, articleImgUrl))
+        }
     })
 })
 
-const scrapeRPS: CronJob = new CronJob('0 39 */1 * * *', () => {
+const scrapeRPS: CronJob = new CronJob('20 */5 * * * *', () => {
     fetch('https://www.rockpapershotgun.com/news')
     .then(res => res.text())
     .then(body => {
@@ -134,6 +152,8 @@ const scrapeRPS: CronJob = new CronJob('0 39 */1 * * *', () => {
         const articleImgUrl = $('.summary_list>li>article>.thumbnail>img').first().attr('src')
 
         //Create embedded message
-        commandMsg.channel.send(generateEmbeddedMessage('RockPaperShotgun', scoop!, articleUrl, articleImgUrl))
+        if (validatePost(previousArticleUrl.rps, articleUrl!, 'rps')) {
+            commandMsg.channel.send(generateEmbeddedMessage('RockPaperShotgun', scoop!, articleUrl, articleImgUrl))
+        }
     })
 })
