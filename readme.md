@@ -41,4 +41,4 @@ which can change depending on the context of the command. For example arguments 
 <b>!!gamingnews</b>
 | Argument | Additional arguments | Description |
 | --- | --- | --- |
-| [source]: e.g. pelaaja | start, stop | Starts and stops gamingnews service for specific news source. Source defines which news source is managed and the process is started and stopped by adding either activate or stop as additional argument after source. |
+| [source]: e.g. pelaaja | activate, stop | Starts and stops gamingnews service for specific news source. Source defines which news source is managed and the process is started and stopped by adding either activate or stop as additional argument after source. |
