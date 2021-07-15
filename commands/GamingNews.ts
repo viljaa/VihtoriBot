@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from 'discord.js'
+import { Message, MessageEmbed, TextChannel } from 'discord.js'
 import Command from '../types/Command'
 import { CronJob } from 'cron'
 import cheerio from 'cheerio'
@@ -11,6 +11,7 @@ let previousArticleUrl: {[key: string]: string} = {
     ign: '',
     rps: ''
 }
+let outputChannel: TextChannel
 
 /* Command */
 export const command: Command = {
@@ -23,6 +24,12 @@ export const command: Command = {
         /* Evaluate arguments for configuring the job. Command structure: !!gamingnews [source] [action] */
 		if(args?.length){
             switch (args[0]) {
+                /* Argument for setting the path to which news are posted */
+                case 'set': {
+                    setOutputChannel(args[1].slice(2, -1).toString())
+                    break
+                }
+                /* Argument actions for news source management */
                 case 'pelaaja': {
                     switch (args[1]) {
                         case 'activate': {
@@ -74,6 +81,12 @@ export const command: Command = {
 
 /* Helper funcitons for gamingnews service */
 
+// Function for setting up output channel
+function setOutputChannel(channelId: string): void {
+    outputChannel = commandMsg.client.channels.cache.find(channel => channel.id === channelId) as TextChannel
+    commandMsg.channel.send(`Gaming news output channel set to <#${channelId}>.`)
+}
+
 // Function for generating embedded news post message
 function generateEmbeddedMessage(sourceName: string, scoop: string, articleUrl?: string, articleImgUrl?: string): MessageEmbed {
     return new MessageEmbed()
@@ -89,6 +102,11 @@ function generateEmbeddedMessage(sourceName: string, scoop: string, articleUrl?:
 function validatePost(oldUrl: string, newUrl: string, source: string):  boolean {
     previousArticleUrl[source] = newUrl
     return oldUrl != newUrl
+}
+
+// Sender function that evaluates the output channel of the post and sends the post
+function sendPost(message: string | MessageEmbed): void {
+    outputChannel ? outputChannel.send(message) : commandMsg.channel.send(message)
 }
 
 /* GameingNews cron-job configuration. */
@@ -113,7 +131,7 @@ const scrapePelaaja: CronJob = new CronJob('0 */5 * * * *', () => {
 
         // Create embedded message
         if (validatePost(previousArticleUrl.pelaaja, articleUrl, 'pelaaja')) {
-            commandMsg.channel.send(generateEmbeddedMessage('Pelaaja.fi', scoop, articleUrl, articleImgUrl))
+            sendPost(generateEmbeddedMessage('Pelaaja.fi', scoop, articleUrl, articleImgUrl))
         }
     })
 })
@@ -133,7 +151,7 @@ const scrapeIgn: CronJob = new CronJob('40 */5 * * * *', () => {
 
         //Create embedded message
         if (validatePost(previousArticleUrl.ign, articleUrl!, 'ign')) {
-            commandMsg.channel.send(generateEmbeddedMessage('IGN', scoop, articleUrl, articleImgUrl))
+            sendPost(generateEmbeddedMessage('IGN', scoop, articleUrl, articleImgUrl))
         }
     })
 })
@@ -153,7 +171,7 @@ const scrapeRPS: CronJob = new CronJob('20 */5 * * * *', () => {
 
         //Create embedded message
         if (validatePost(previousArticleUrl.rps, articleUrl!, 'rps')) {
-            commandMsg.channel.send(generateEmbeddedMessage('RockPaperShotgun', scoop!, articleUrl, articleImgUrl))
+            sendPost(generateEmbeddedMessage('RockPaperShotgun', scoop!, articleUrl, articleImgUrl))
         }
     })
 })
