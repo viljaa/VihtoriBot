@@ -18,7 +18,7 @@ Currently supported base commands for Vihtori-Bot, check command specific argume
 | --- | --- | --- |
 | gamingnews | [source, e.g. pelaaja], activate, stop | Command for managing scheduled gamingnews fetching service, that fetches articles from different gaming news outlets on the web.|
 | greet | - | Vihtori-Bot greets the user with proper Vihtori enthusiasm! |
-| help | - | Provides link to the command documentation. |
+| help | [commandname] | Provides help for the usage of the commands. Adding commandname as argument gives additional info about a specific command. |
 | steam | name, hours | Command for SteamWebAPI related functionalities. |
 
 ### Command specific arguments
@@ -32,15 +32,19 @@ which can change depending on the context of the command. For example arguments 
 /* Source is IGN */
 !!gamingnews ign activate
 ```
+<b>!!gamingnews</b>
+| Argument | Additional arguments | Description |
+| --- | --- | --- |
+| set | [channel]: e.g. #general | Sets the output channel for the news posts. Output channel must be a text channel. |
+| [source]: e.g. pelaaja | activate, stop | Starts and stops gamingnews service for specific news source. Source defines which news source is managed and the process is started and stopped by adding either activate or stop as additional argument after source. |
+
+<b>!!help</b>
+| Argument | Additional arguments | Description |
+| --- | --- | --- |
+| [commandname]: e.g. gamingnews | - | Provides additional information about a single command. |
 
 <b>!!steam</b>
 | Argument | Additional arguments | Description |
 | --- | --- | --- |
 | hours | [steamid]: e.g. 7656119808225719 | Calculates the total amount of hours a steam account has accross all owned games on the account.|
 | name | [steamid]: e.g. 76561198082257196 | Fetches Steam account username for the provided steamid from SteamWebAPI. |
-
-<b>!!gamingnews</b>
-| Argument | Additional arguments | Description |
-| --- | --- | --- |
-| set | [channel]: e.g. #general | Sets the output channel for the news posts. Output channel must be a text channel. |
-| [source]: e.g. pelaaja | activate, stop | Starts and stops gamingnews service for specific news source. Source defines which news source is managed and the process is started and stopped by adding either activate or stop as additional argument after source. |
