@@ -48,5 +48,6 @@ export default class Bot {
     private commandNotFound(message: Message): void {
         const docsUrl = 'https://github.com/viljaa/VihtoriBot/blob/master/readme.md'
         message.channel.send(`I\'m sorry, I couldn\'t find that command from my vast vocabulary. See the Vihtori-Bot command documentation for available commands: ${docsUrl}`)
+        message.channel.send('For more info about single command, try !!help [commandname] e.g. !!help help.')
     }
 }

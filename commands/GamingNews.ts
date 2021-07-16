@@ -17,6 +17,8 @@ let outputChannel: TextChannel
 export const command: Command = {
     name: 'gamingnews',
     description: 'Gaming articles scraped from different news sources.',
+    syntax: '!!gamingnews [source] [action]',
+    arguments: ['[source] - gaming news source that you want to configure, e.g. pelaaja', '[action] - activate: start news service for specified source, stop: stop news service for specified source'],
     execute(message: Message, args?: String[]) {
         /* Store the message in a variable, so that it can be used by cron jobs that use Discord.js methods. */
         commandMsg = message

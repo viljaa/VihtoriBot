@@ -6,6 +6,11 @@ import { OwnedGames, PlayerSummariesPublic } from '../types/SteamAPI'
 export const command: Command = {
     name: 'steam',
 	description: 'Commands related to Steam.',
+    syntax: '!!steam [argument] [argument]',
+    arguments: [
+        'name - gets steam account name by steamid, pass steamid as second argument',
+        'hours - calculates steam account\'s total playtime accross all games, pass steamid as second argument'
+    ],
 	execute(message: Message, args?: String[]) {
 		const apiKey = process.env.STEAM_API_KEY
 
