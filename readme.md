@@ -18,6 +18,7 @@ Currently supported base commands for Vihtori-Bot, check command specific argume
 | --- | --- | --- |
 | gamingnews | [source, e.g. pelaaja], activate, stop | Command for managing scheduled gamingnews fetching service, that fetches articles from different gaming news outlets on the web.|
 | greet | - | Vihtori-Bot greets the user with proper Vihtori enthusiasm! |
+| help | - | Provides link to the command documentation. |
 | steam | name, hours | Command for SteamWebAPI related functionalities. |
 
 ### Command specific arguments

@@ -1,5 +1,5 @@
 /* Imports */
-import { Client, Collection } from 'discord.js'
+import { Client, Collection, Message } from 'discord.js'
 import * as dotenv from 'dotenv'
 import fs from 'fs'
 import Command from '../types/Command'
@@ -36,17 +36,17 @@ export default class Bot {
         this.client.on('message', message => {
             if (!message.content.startsWith(this.prefix) || message.author.bot) return
             const args: string[] = message.content.slice(2).split(' ')
-            const command: string = args[0]
+            const command: Command | undefined = this.commandCollection.get(args[0])
             args.shift()
 
-            try {
-                this.commandCollection.get(command)?.execute(message, args)
-            }
-            catch(err){
-                console.log(err)
-            }
+            command ? command.execute(message, args) : this.commandNotFound(message)
         })
 
         return this.client.login(this.token)
+    }
+    
+    private commandNotFound(message: Message): void {
+        const docsUrl = 'https://github.com/viljaa/VihtoriBot/blob/master/readme.md'
+        message.channel.send(`I\'m sorry, I couldn\'t find that command from my vast vocabulary. See the Vihtori-Bot command documentation for available commands: ${docsUrl}`)
     }
 }
