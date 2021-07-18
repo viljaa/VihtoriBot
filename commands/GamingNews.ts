@@ -145,11 +145,11 @@ const scrapeIgn: CronJob = new CronJob('40 */5 * * * *', () => {
         const $ = cheerio.load(body)
 
         // Scrape text related data
-        const scoop = $('article>.m>h3>a').first().text()
-        const articleUrl = $('article>.m>h3>a').first().attr('href')
+        const scoop = $('.broll>.tbl>article>.m>h3>a').first().text()
+        const articleUrl = $('.broll>.tbl>article>.m>h3>a').first().attr('href')
 
         // Scrape image related data
-        const articleImgUrl = $('article>.t>a>img').first().attr('src')
+        const articleImgUrl = $('.broll>.tbl>article>.t>a>img').first().attr('src')
 
         //Create embedded message
         if (validatePost(previousArticleUrl.ign, articleUrl!, 'ign')) {
