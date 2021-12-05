@@ -4,10 +4,12 @@ export interface OwnedGames {
         games: [
             {
                 appid: number,
+                name: string,
                 playtime_forever: number,
                 playtime_windows_forever: number,
                 playtime_mac_forever: number,
                 playtime_linux_forever: number,
+                playtime_2weeks: number,
             }
         ]
     }

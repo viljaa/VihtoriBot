@@ -46,5 +46,5 @@ which can change depending on the context of the command. For example arguments 
 <b>!!steam</b>
 | Argument | Additional arguments | Description |
 | --- | --- | --- |
-| hours | [steamid]: e.g. 7656119808225719 | Calculates the total amount of hours a steam account has accross all owned games on the account.|
+| hours | [steamid]: e.g. 7656119808225719 | Calculates variety of playtime statistics for the Steam account with the provided steamid. |
 | name | [steamid]: e.g. 76561198082257196 | Fetches Steam account username for the provided steamid from SteamWebAPI. |
