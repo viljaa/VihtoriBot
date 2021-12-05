@@ -7,3 +7,7 @@ export default interface Command {
 	arguments?: string[],
 	execute(message: Message, args?: string[]): void
 }
+
+export function invalidCommand(message: Message): void {
+	message.channel.send('Could not process command, check your command and arguments.')
+} 
