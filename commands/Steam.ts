@@ -113,6 +113,9 @@ function getPlayerSummariesJSON(steamid: string, apikey: string): Promise<Player
 
 function embeddedHourData(gamesData: PlaytimeData, playerSummaries: PlayerSummariesPublic): MessageEmbed {
     const user = playerSummaries.response.players[0]
+    /* Construct content string for the recently played games part of the embedded message */
+    let recentHoursDataString = ''
+    gamesData.mostPlayedRecent.forEach(game => recentHoursDataString += `${game.game} --- ${game.playtime_2_weeks} hours\n`)
     /* Generate the embedded message from the gathered data provided in the function parameters. */
     return new MessageEmbed()
     .setColor('#2a475e')
@@ -123,9 +126,7 @@ function embeddedHourData(gamesData: PlaytimeData, playerSummaries: PlayerSummar
         { name: 'Most played game ever:', value: `${gamesData.mostPlayedEver.game} --- ${gamesData.mostPlayedEver.playtime} hours`},
         {
             name: 'Most played games in the last 2 weeks:', 
-            value: `${gamesData.mostPlayedRecent[0].game} --- ${gamesData.mostPlayedRecent[0].playtime_2_weeks} hours\n`
-                    +`${gamesData.mostPlayedRecent[1].game} --- ${gamesData.mostPlayedRecent[1].playtime_2_weeks} hours\n`
-                    +`${gamesData.mostPlayedRecent[2].game} --- ${gamesData.mostPlayedRecent[2].playtime_2_weeks} hours` 
+            value: recentHoursDataString.length > 0 ? recentHoursDataString :'No recent gaming activity.'
         },
     )
     .setThumbnail(user.avatar)
