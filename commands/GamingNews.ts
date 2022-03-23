@@ -9,7 +9,8 @@ let commandMsg: Message
 let previousArticleUrl: {[key: string]: string} = {
     pelaaja: '',
     ign: '',
-    rps: ''
+    rps: '',
+    mp: ''
 }
 let outputChannel: TextChannel
 
@@ -69,6 +70,20 @@ export const command: Command = {
                         }
                         case 'stop': {
                             scrapeRPS.stop()
+                            break
+                        }
+                    }
+                    break
+                }
+                case 'mp': {
+                    switch (args[1]) {
+                        case 'activate': {
+                            scrapeMuropaketti.start()
+                            message.channel.send('Ah classic, news from Muropaketti.com incoming!')
+                            break
+                        }
+                        case 'stop': {
+                            scrapeMuropaketti.stop()
                             break
                         }
                     }
@@ -174,6 +189,26 @@ const scrapeRPS: CronJob = new CronJob('20 */5 * * * *', () => {
         //Create embedded message
         if (validatePost(previousArticleUrl.rps, articleUrl!, 'rps')) {
             sendPost(generateEmbeddedMessage('RockPaperShotgun', scoop!, articleUrl, articleImgUrl))
+        }
+    })
+})
+
+const scrapeMuropaketti: CronJob = new CronJob('10 */5 * * * *', () => {
+    fetch('https://muropaketti.com/kategoria/pelit/')
+    .then(res => res.text())
+    .then(body => {
+        const $ = cheerio.load(body)
+
+        // Scrape text related data
+        const scoop = $('#postlisting-53>.grid>article>.post>.grid>div>h3>a').first().text()
+        const articleUrl = $('#postlisting-53>.grid>article>.post>.grid>div>h3>a').first().attr('href')
+
+        // Scrape image related data
+        const articleImgUrl = $('#postlisting-53>.grid>article>.post>.grid>.list-item__image>.fluid-image-wrapper>.fluid-image').first().attr('data-src')
+        
+        //Create embedded message
+        if (validatePost(previousArticleUrl.mp, articleUrl!, 'mp')) {
+            sendPost(generateEmbeddedMessage('Muropaketti', scoop, articleUrl, articleImgUrl))
         }
     })
 })
